@@ -1,0 +1,22 @@
+server:
+  port : 8088
+
+spring:
+  application:
+    name: neo-phone-number-api
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        default_schema: neo
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: mysecretpassword
+    driver-class-name: org.postgresql.Driver
+
+springdoc:
+  api-docs:
+    path: /api-docs
