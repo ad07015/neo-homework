@@ -101,6 +101,17 @@ class PhoneNumberControllerImplTest {
     @MethodSource("provideExpectedCountriesByPhoneNumber")
     void whenValidPhoneNumber_shouldReturnListOfMatchingCountries(String phoneNumber, List<String> countries) throws Exception {
         // set up
+        when(repository.findAll()).thenReturn(List.of(
+                new CountryPhoneCode(1, "Bahamas", "1242"),
+                new CountryPhoneCode(1, "United States", "1"),
+                new CountryPhoneCode(1, "Canada", "1"),
+                new CountryPhoneCode(1, "Russia", "7"),
+                new CountryPhoneCode(1, "Kazakhstan", "371"),
+                new CountryPhoneCode(1, "Kazakhstan", "76"),
+                new CountryPhoneCode(1, "Kazakhstan", "77"),
+                new CountryPhoneCode(1, "Latvia", "371")
+        ));
+
         var requestBuilder = get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
                 .param(PHONE_NUMBER_PARAM_NAME, phoneNumber);
 
@@ -118,10 +129,10 @@ class PhoneNumberControllerImplTest {
 
     private static Stream<Arguments> provideExpectedCountriesByPhoneNumber() {
         return Stream.of(
-//                Arguments.of("12423222931", List.of("Bahamas")),
-//                Arguments.of("11165384765", List.of("United States, Canada")),
-//                Arguments.of("71423423412", List.of("Russia")),
-//                Arguments.of("77112227231", List.of("Kazakhstan")),
+                Arguments.of("12423222931", List.of("Bahamas")),
+                Arguments.of("11165384765", List.of("United States", "Canada")),
+                Arguments.of("71423423412", List.of("Russia")),
+                Arguments.of("77112227231", List.of("Kazakhstan")),
                 Arguments.of("37129667232", List.of("Latvia"))
         );
     }
