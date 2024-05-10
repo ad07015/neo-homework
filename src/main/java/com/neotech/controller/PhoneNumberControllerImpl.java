@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/neo")
@@ -26,10 +27,10 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
     }
 
     @Override
-    @GetMapping("/country-by-phone-number")
+    @GetMapping(value = "/country-by-phone-number", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<String>> getCountriesByPhoneNumber(String phoneNumber) throws CountryNotFoundException, PhoneNumberNotValidException {
         if (!StringUtils.isNumeric(phoneNumber)) {
-            throw new PhoneNumberNotValidException();
+            throw new PhoneNumberNotValidException("Invalid phone number provided");
         }
 
         var allCodes = countryPhoneCodeRepository.findAll();
@@ -44,7 +45,7 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
                 .collect(toSet());
 
         if (matchingCodes.isEmpty()) {
-            throw new CountryNotFoundException();
+            throw new CountryNotFoundException("No country matches provided phone number");
         }
         return new ResponseEntity<>(matchingCodes, HttpStatus.OK);
     }

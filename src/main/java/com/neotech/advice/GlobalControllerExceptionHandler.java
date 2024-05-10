@@ -1,5 +1,7 @@
 package com.neotech.advice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +17,15 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(PhoneNumberNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<String> handleConversion(PhoneNumberNotValidException ex) {
-        return new ResponseEntity<>("Invalid phone number provided", BAD_REQUEST);
+    public ResponseEntity<String> handleConversion(PhoneNumberNotValidException ex) throws JsonProcessingException {
+        var objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(ex.getMessage()), BAD_REQUEST);
     }
 
     @ExceptionHandler(CountryNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
-    public ResponseEntity<String> handleMyCustomException(CountryNotFoundException ex) {
-        return new ResponseEntity<>("No country matches provided phone number", NOT_FOUND);
+    public ResponseEntity<String> handleMyCustomException(CountryNotFoundException ex) throws JsonProcessingException {
+        var objectMapper = new ObjectMapper();
+        return new ResponseEntity<>(objectMapper.writeValueAsString(ex.getMessage()), BAD_REQUEST);
     }
 }
