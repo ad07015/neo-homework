@@ -30,10 +30,10 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
     @GetMapping(value = "/country-by-phone-number", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Set<String>> getCountriesByPhoneNumber(String phoneNumber) throws CountryNotFoundException, PhoneNumberNotValidException {
         if (!StringUtils.isNumeric(phoneNumber)) {
-            throw new PhoneNumberNotValidException("Invalid phone number provided");
+            throw new PhoneNumberNotValidException(PhoneNumberNotValidException.MESSAGE);
         }
 
-        var allCodes = countryPhoneCodeRepository.findAll();
+        var allCodes = countryPhoneCodeRepository.findAll(); // TODO: Create custom query to avoid using findAll()
         var matchingCodes = allCodes.stream()
                 .map(code -> {
                     if (phoneNumber.startsWith(code.getCode())) {
@@ -45,7 +45,7 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
                 .collect(toSet());
 
         if (matchingCodes.isEmpty()) {
-            throw new CountryNotFoundException("No country matches provided phone number");
+            throw new CountryNotFoundException(CountryNotFoundException.MESSAGE);
         }
         return new ResponseEntity<>(matchingCodes, HttpStatus.OK);
     }
