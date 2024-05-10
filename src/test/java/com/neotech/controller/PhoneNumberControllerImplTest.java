@@ -1,11 +1,13 @@
 package com.neotech.controller;
 
-import com.neotech.exception.CountryNotFoundException;
 import com.neotech.model.CountryPhoneCode;
 import com.neotech.repository.CountryPhoneCodeRepository;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,12 +18,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -80,7 +82,7 @@ class PhoneNumberControllerImplTest {
     @Test
     void whenPhoneNumberNotANumber_expectNotFound() {
         // set up
-        var notANumberPhoneNumber = "asdf";
+        var notANumberPhoneNumber = "text";
 
         var requestBuilder = get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
                 .param(PHONE_NUMBER_PARAM_NAME, notANumberPhoneNumber);
@@ -93,5 +95,34 @@ class PhoneNumberControllerImplTest {
 
         // verify
         assertTrue(servletException.getMessage().contains("PhoneNumberNotValidException"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideExpectedCountriesByPhoneNumber")
+    void whenValidPhoneNumber_shouldReturnListOfMatchingCountries(String phoneNumber, List<String> countries) throws Exception {
+        // set up
+        var requestBuilder = get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
+                .param(PHONE_NUMBER_PARAM_NAME, phoneNumber);
+
+        // perform
+        var result = this.mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+
+        // verify
+        for (String country : countries) {
+            assertTrue(content.contains(country));
+        }
+    }
+
+    private static Stream<Arguments> provideExpectedCountriesByPhoneNumber() {
+        return Stream.of(
+//                Arguments.of("12423222931", List.of("Bahamas")),
+//                Arguments.of("11165384765", List.of("United States, Canada")),
+//                Arguments.of("71423423412", List.of("Russia")),
+//                Arguments.of("77112227231", List.of("Kazakhstan")),
+                Arguments.of("37129667232", List.of("Latvia"))
+        );
     }
 }

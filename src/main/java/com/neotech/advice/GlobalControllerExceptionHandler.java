@@ -26,6 +26,6 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(NOT_FOUND)
     public ResponseEntity<String> handleMyCustomException(CountryNotFoundException ex) throws JsonProcessingException {
         var objectMapper = new ObjectMapper();
-        return new ResponseEntity<>(objectMapper.writeValueAsString(ex.getMessage()), BAD_REQUEST);
+        return new ResponseEntity<>(objectMapper.writeValueAsString(ex.getMessage()), NOT_FOUND);
     }
 }
