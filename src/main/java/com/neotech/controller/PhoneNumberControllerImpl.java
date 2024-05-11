@@ -1,5 +1,6 @@
 package com.neotech.controller;
 
+import com.neotech.consumer.CountryCodeWikidataConsumer;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
 import com.neotech.repository.CountryPhoneCodeRepository;
@@ -21,9 +22,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class PhoneNumberControllerImpl implements PhoneNumberController {
 
     private final CountryPhoneCodeRepository countryPhoneCodeRepository;
+    private final CountryCodeWikidataConsumer countryCodeWikidataConsumer;
 
-    public PhoneNumberControllerImpl(CountryPhoneCodeRepository countryPhoneCodeRepository) {
+    public PhoneNumberControllerImpl(CountryPhoneCodeRepository countryPhoneCodeRepository, CountryCodeWikidataConsumer countryCodeWikidataConsumer) {
         this.countryPhoneCodeRepository = countryPhoneCodeRepository;
+        this.countryCodeWikidataConsumer = countryCodeWikidataConsumer;
+    }
+
+    @Override
+    @GetMapping(value = "/load-country-phone-codes", produces = APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> loadCountryPhoneCodes() {
+        countryCodeWikidataConsumer.extractCountryCodes();
+
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     @Override

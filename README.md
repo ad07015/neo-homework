@@ -26,3 +26,4 @@ e.g. 'Isle of Man' - 44 (1624, 7524, 7624, 7924)
 - [ ] Load data into the PostgreSQL database
 - [ ] Figure out how to find records where the provided phone number 
 starts with the country code without using findAll()
+- [ ] Introduce Logback logging

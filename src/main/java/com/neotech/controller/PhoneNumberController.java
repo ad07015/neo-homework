@@ -17,6 +17,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public interface PhoneNumberController {
 
+    @Operation(summary = "Extract country phone codes from Wikidata")
+    ResponseEntity<String> loadCountryPhoneCodes();
+
     @Operation(summary = "Get countries by phone number")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found country by phone number",
