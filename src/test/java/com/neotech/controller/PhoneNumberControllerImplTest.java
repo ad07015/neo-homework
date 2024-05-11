@@ -1,5 +1,6 @@
 package com.neotech.controller;
 
+import com.neotech.consumer.CountryCodeWikidataConsumer;
 import com.neotech.model.CountryPhoneCode;
 import com.neotech.repository.CountryPhoneCodeRepository;
 import jakarta.servlet.ServletException;
@@ -35,8 +36,12 @@ class PhoneNumberControllerImplTest {
 
     public static final String PHONE_NUMBER_PARAM_NAME = "phoneNumber";
     public static final String NEO_COUNTRY_BY_PHONE_NUMBER_PATH = "/neo/country-by-phone-number";
+
     @MockBean
     private CountryPhoneCodeRepository repository;
+
+    @MockBean
+    private CountryCodeWikidataConsumer countryCodeWikidataConsumer;
 
     @Autowired
     private MockMvc mockMvc;
