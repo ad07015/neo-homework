@@ -26,3 +26,11 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+
+logging:
+  level:
+    com.neotech: DEBUG
+    org.springframework.:
+      root: DEBUG
+      web: DEBUG
+    org.hibernate: ERROR
