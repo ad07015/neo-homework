@@ -1,3 +1,11 @@
+### Project information
+- Author: Andrejs Daško
+  - LinkedIn: https://www.linkedin.com/in/andrejsdasko
+  - Github profile: https://github.com/ad07015
+
+
+- Project Github repository: https://github.com/ad07015/neo-homework
+
 ### Configuring the database
 - Run a PostgreSQL server on your local machine on port 5432
 - Create a root database user
@@ -27,3 +35,5 @@ e.g. 'Isle of Man' - 44 (1624, 7524, 7624, 7924)
 - [ ] Figure out how to find records where the provided phone number 
 starts with the country code without using findAll()
 - [ ] Implement a simple front page using Thymeleaf
+- [ ] Create a docker-compose file to automatically pull and run the PostgreSQL container
+on port 5432
