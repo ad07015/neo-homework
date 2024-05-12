@@ -96,6 +96,18 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <!-- WIKITEXT PARSER -->
+        <dependency>
+            <groupId>org.sweble.wikitext</groupId>
+            <artifactId>swc-engine</artifactId>
+            <version>3.1.9</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/de.fau.cs.osr.utils/utils -->
+        <dependency>
+            <groupId>de.fau.cs.osr.utils</groupId>
+            <artifactId>utils</artifactId>
+            <version>3.0.8</version>
+        </dependency>
 
         <!-- TESTING -->
         <dependency>
