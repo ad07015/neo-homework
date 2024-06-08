@@ -6,9 +6,7 @@ import com.neotech.repository.CountryPhoneCodeRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CountryPhoneCodeService {
@@ -21,20 +19,20 @@ public class CountryPhoneCodeService {
         this.countryPhoneCodeRepository = countryPhoneCodeRepository;
     }
 
-    public List<CountryPhoneCode> findAll() {
-        return countryPhoneCodeRepository.findAll();
+    public Set<CountryPhoneCode> findAll() {
+        return new HashSet<>(countryPhoneCodeRepository.findAll());
     }
 
-    public List<CountryPhoneCode> extractCountryCodesFromWiki() throws IOException {
+    public Set<CountryPhoneCode> extractCountryCodesFromWiki() throws IOException {
         Map<String, String> countryToCountryCodeMap = countryCodeWikiConsumer.extractCountryCodesFromWiki();
-        var countryCodes = new ArrayList<CountryPhoneCode>();
+        var countryCodes = new HashSet<CountryPhoneCode>();
         countryToCountryCodeMap.forEach((country, code) -> {
             countryCodes.add(new CountryPhoneCode(null, country, code));
         });
         return countryCodes;
     }
 
-    public void persistCountryCodes(List<CountryPhoneCode> countryPhoneCodes) {
+    public void persistCountryCodes(Set<CountryPhoneCode> countryPhoneCodes) {
         countryPhoneCodeRepository.saveAll(countryPhoneCodes);
     }
 }

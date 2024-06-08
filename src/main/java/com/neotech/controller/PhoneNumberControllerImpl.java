@@ -41,7 +41,7 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
         countryPhoneCodeService.persistCountryCodes(countryPhoneCodes);
 
         // TODO: Create custom query to avoid using findAll()
-        List<CountryPhoneCode> allCodes = countryPhoneCodeService.findAll();
+        Set<CountryPhoneCode> allCodes = countryPhoneCodeService.findAll();
 
         var matchingCodes = allCodes.stream()
                 .map(code -> {

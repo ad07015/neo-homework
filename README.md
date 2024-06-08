@@ -30,16 +30,11 @@ Swagger for this application is available here: **[swagger](http://localhost:808
 
 ### TODO
 **Functional requirements:**
-- [ ] Extract data from Wikipedia API. Currently, data is populated by a Flyway script
-- [ ] Map extracted JSON to a collection of CountryPhoneCode objects
-  - [ ] Handle regular countries with one country code, e.g. Latvia - 371
-  - [ ] Handle special cases for countries with multiple region codes, 
+- [ ] Handle special cases for countries with multiple region codes, 
 e.g. 'Isle of Man' - 44 (1624, 7524, 7624, 7924)
-  - [ ] Test the mapper
-- [ ] Load data into the PostgreSQL database
 - [ ] Figure out how to find records where the provided phone number 
 starts with the country code without using findAll()
-- [ ] Implement a simple front page using Thymeleaf
+- [ ] Implement a simple front page
 
 **Quality of life improvements:**
 - [ ] Create a docker-compose file to automatically pull and run the PostgreSQL container
