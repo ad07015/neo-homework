@@ -16,6 +16,7 @@ import org.sweble.wikitext.parser.parser.LinkTargetException;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,8 +37,8 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
 
     @Override
     @GetMapping(value = "/load-country-phone-codes", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<WikidataCountryCodeResponse> loadCountryPhoneCodes() throws IOException, MediaWikiApiErrorException, EngineException, LinkTargetException {
-        return countryCodeWikidataConsumer.extractCountryCodes();
+    public Map<String, String> loadCountryPhoneCodes() throws IOException {
+        return countryCodeWikidataConsumer.getCountryCodes();
     }
 
     @Override

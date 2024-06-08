@@ -6,7 +6,8 @@
 - Project Github repository: https://github.com/ad07015/neo-homework
 
 ### Configuring the database
-- Run a PostgreSQL server on your local machine on port 5432
+- Run a PostgreSQL server in a docker container on a local machine on port 5432
+  - docker run --name verywood-db -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 - Create a root database user
 - Create a database by running the following SQL script:
   - CREATE DATABASE postgres

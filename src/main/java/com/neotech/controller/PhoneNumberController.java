@@ -16,6 +16,7 @@ import org.sweble.wikitext.parser.parser.LinkTargetException;
 import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -23,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public interface PhoneNumberController {
 
     @Operation(summary = "Extract country phone codes from Wikidata")
-    ResponseEntity<WikidataCountryCodeResponse> loadCountryPhoneCodes() throws IOException, MediaWikiApiErrorException, EngineException, LinkTargetException;
+    Map<String, String> loadCountryPhoneCodes() throws IOException, MediaWikiApiErrorException, EngineException, LinkTargetException;
 
     @Operation(summary = "Get countries by phone number")
     @ApiResponses(value = {
