@@ -1,22 +1,18 @@
 package com.neotech.controller;
 
-import com.neotech.consumer.CountryCodeWikidataConsumer;
-import com.neotech.domain.WikidataCountryCodeResponse;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
-import com.neotech.repository.CountryPhoneCodeRepository;
+import com.neotech.model.CountryPhoneCode;
+import com.neotech.service.CountryPhoneCodeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.sweble.wikitext.engine.EngineException;
-import org.sweble.wikitext.parser.parser.LinkTargetException;
-import org.wikidata.wdtk.wikibaseapi.apierrors.MediaWikiApiErrorException;
 
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,28 +23,26 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/neo")
 public class PhoneNumberControllerImpl implements PhoneNumberController {
 
-    private final CountryPhoneCodeRepository countryPhoneCodeRepository;
-    private final CountryCodeWikidataConsumer countryCodeWikidataConsumer;
+    private final CountryPhoneCodeService countryPhoneCodeService;
 
-    public PhoneNumberControllerImpl(CountryPhoneCodeRepository countryPhoneCodeRepository, CountryCodeWikidataConsumer countryCodeWikidataConsumer) {
-        this.countryPhoneCodeRepository = countryPhoneCodeRepository;
-        this.countryCodeWikidataConsumer = countryCodeWikidataConsumer;
-    }
-
-    @Override
-    @GetMapping(value = "/load-country-phone-codes", produces = APPLICATION_JSON_VALUE)
-    public Map<String, String> loadCountryPhoneCodes() throws IOException {
-        return countryCodeWikidataConsumer.getCountryCodes();
+    public PhoneNumberControllerImpl(CountryPhoneCodeService countryPhoneCodeService) {
+        this.countryPhoneCodeService = countryPhoneCodeService;
     }
 
     @Override
     @GetMapping(value = "/country-by-phone-number", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<String>> getCountriesByPhoneNumber(String phoneNumber) throws CountryNotFoundException, PhoneNumberNotValidException {
+    public ResponseEntity<Set<String>> getCountriesByPhoneNumber(String phoneNumber) throws CountryNotFoundException, PhoneNumberNotValidException, IOException {
+
         if (!StringUtils.isNumeric(phoneNumber)) {
             throw new PhoneNumberNotValidException(PhoneNumberNotValidException.MESSAGE);
         }
 
-        var allCodes = countryPhoneCodeRepository.findAll(); // TODO: Create custom query to avoid using findAll()
+        var countryPhoneCodes = countryPhoneCodeService.extractCountryCodesFromWiki();
+        countryPhoneCodeService.persistCountryCodes(countryPhoneCodes);
+
+        // TODO: Create custom query to avoid using findAll()
+        List<CountryPhoneCode> allCodes = countryPhoneCodeService.findAll();
+
         var matchingCodes = allCodes.stream()
                 .map(code -> {
                     if (phoneNumber.startsWith(code.getCode())) {

@@ -1,6 +1,6 @@
 package com.neotech.controller;
 
-import com.neotech.consumer.CountryCodeWikidataConsumer;
+import com.neotech.consumer.CountryCodeWikiConsumer;
 import com.neotech.model.CountryPhoneCode;
 import com.neotech.repository.CountryPhoneCodeRepository;
 import jakarta.servlet.ServletException;
@@ -41,7 +41,7 @@ class PhoneNumberControllerImplTest {
     private CountryPhoneCodeRepository repository;
 
     @MockBean
-    private CountryCodeWikidataConsumer countryCodeWikidataConsumer;
+    private CountryCodeWikiConsumer countryCodeWikiConsumer;
 
     @Autowired
     private MockMvc mockMvc;

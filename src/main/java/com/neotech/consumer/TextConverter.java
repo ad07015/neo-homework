@@ -19,7 +19,6 @@ package com.neotech.consumer;
 
 import de.fau.cs.osr.ptk.common.AstVisitor;
 import de.fau.cs.osr.utils.StringTools;
-//import de.fau.cs.osr.utils.StringUtils;
 import org.sweble.wikitext.engine.PageTitle;
 import org.sweble.wikitext.engine.config.WikiConfig;
 import org.sweble.wikitext.engine.nodes.EngPage;
