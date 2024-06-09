@@ -23,6 +23,10 @@ public class CountryPhoneCodeService {
         return new HashSet<>(countryPhoneCodeRepository.findAll());
     }
 
+    public Set<CountryPhoneCode> findStartingWith(String firstDigit) {
+        return new HashSet<>(countryPhoneCodeRepository.findByCodeStartingWith(firstDigit));
+    }
+
     public Set<CountryPhoneCode> extractCountryCodesFromWiki() throws IOException {
         Map<String, String> countryToCountryCodeMap = countryCodeWikiConsumer.extractCountryCodesFromWiki();
         var countryCodes = new HashSet<CountryPhoneCode>();

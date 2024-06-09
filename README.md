@@ -31,8 +31,6 @@ Swagger for this application is available here: **[swagger](http://localhost:808
 **Functional requirements:**
 - [ ] Handle special cases for countries with multiple region codes, 
 e.g. 'Isle of Man' - 44 (1624, 7524, 7624, 7924)
-- [ ] Figure out how to find records where the provided phone number 
-starts with the country code without using findAll()
 - [ ] Implement a simple front page
 
 **Quality of life improvements:**

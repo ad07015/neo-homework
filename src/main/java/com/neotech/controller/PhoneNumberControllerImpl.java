@@ -1,10 +1,14 @@
 package com.neotech.controller;
 
+import com.neotech.consumer.CountryCodeWikiConsumer;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
 import com.neotech.model.CountryPhoneCode;
 import com.neotech.service.CountryPhoneCodeService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +23,12 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping("/neo")
 public class PhoneNumberControllerImpl implements PhoneNumberController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PhoneNumberControllerImpl.class);
     private final CountryPhoneCodeService countryPhoneCodeService;
 
     public PhoneNumberControllerImpl(CountryPhoneCodeService countryPhoneCodeService) {
@@ -40,8 +46,8 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
         var countryPhoneCodes = countryPhoneCodeService.extractCountryCodesFromWiki();
         countryPhoneCodeService.persistCountryCodes(countryPhoneCodes);
 
-        // TODO: Create custom query to avoid using findAll()
-        Set<CountryPhoneCode> allCodes = countryPhoneCodeService.findAll();
+        Set<CountryPhoneCode> allCodes = countryPhoneCodeService.findStartingWith(phoneNumber.substring(0, 1));
+        LOGGER.info("Retrieved codes count: " + allCodes.size());
 
         var matchingCodes = allCodes.stream()
                 .map(code -> {
