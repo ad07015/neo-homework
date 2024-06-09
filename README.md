@@ -1,9 +1,8 @@
 ### Project information
 - Author: Andrejs Daško
-  - LinkedIn: https://www.linkedin.com/in/andrejsdasko
-  - Github profile: https://github.com/ad07015
-
-- Project Github repository: https://github.com/ad07015/neo-homework
+  - LinkedIn: **[Andrejs Daško](https://www.linkedin.com/in/andrejsdasko)**
+  - Github profile: **[ad07015](https://github.com/ad07015)**
+- Project Github repository: **[neo-homework](https://github.com/ad07015/neo-homework)**
 
 ### Configuring the database
 - Run a PostgreSQL server in a docker container on a local machine on port 5432
