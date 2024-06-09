@@ -31,7 +31,6 @@ public class CountryCodeWikiConsumer {
                 var phoneCode = columns.get(1).text();
                 resultMap.put(countryName, phoneCode);
             }
-            resultMap.forEach((key, val) -> LOGGER.debug(String.format("Country: %s, Phone code: %s%n", key, val)));
             return resultMap;
         } else {
             return new HashMap<>();
