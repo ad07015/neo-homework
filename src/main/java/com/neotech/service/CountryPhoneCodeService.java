@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class CountryPhoneCodeService {
@@ -30,10 +31,10 @@ public class CountryPhoneCodeService {
     }
 
     public Set<CountryPhoneCode> extractCountryCodesFromWiki() throws IOException {
-        Map<String, String> countryToCountryCodeMap = countryCodeWikiConsumer.extractCountryCodesFromWiki();
-        var countryCodes = new HashSet<CountryPhoneCode>();
-        countryToCountryCodeMap.forEach((country, code) -> countryCodes.add(new CountryPhoneCode(null, country, code)));
-        return countryCodes;
+        return countryCodeWikiConsumer.extractCountryCodesFromWiki()
+                .entrySet().stream()
+                .map(entry -> new CountryPhoneCode(null, entry.getKey(), entry.getValue()))
+                .collect(toSet());
     }
 
     public void persistCountryCodes(Set<CountryPhoneCode> countryPhoneCodes) {
