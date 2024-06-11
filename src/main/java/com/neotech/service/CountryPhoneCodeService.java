@@ -1,7 +1,7 @@
 package com.neotech.service;
 
 import com.neotech.consumer.CountryCodeWikiConsumer;
-import com.neotech.model.CountryPhoneCode;
+import com.neotech.entity.CountryPhoneCode;
 import com.neotech.repository.CountryPhoneCodeRepository;
 import org.springframework.stereotype.Service;
 

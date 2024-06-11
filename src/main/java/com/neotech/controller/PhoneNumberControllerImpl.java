@@ -1,8 +1,8 @@
 package com.neotech.controller;
 
+import com.neotech.entity.CountryPhoneCode;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
-import com.neotech.model.CountryPhoneCode;
 import com.neotech.service.CountryPhoneCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

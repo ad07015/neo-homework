@@ -1,8 +1,8 @@
 package com.neotech.controller;
 
+import com.neotech.entity.CountryPhoneCode;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
-import com.neotech.model.CountryPhoneCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

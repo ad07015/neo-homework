@@ -1,4 +1,4 @@
-package com.neotech.model;
+package com.neotech.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

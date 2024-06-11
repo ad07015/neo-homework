@@ -1,7 +1,7 @@
 package com.neotech.controller;
 
 import com.neotech.consumer.CountryCodeWikiConsumer;
-import com.neotech.model.CountryPhoneCode;
+import com.neotech.entity.CountryPhoneCode;
 import com.neotech.repository.CountryPhoneCodeRepository;
 import com.neotech.service.CountryPhoneCodeService;
 import jakarta.servlet.ServletException;
@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +45,9 @@ class PhoneNumberControllerImplTest {
 
     @MockBean
     private CountryPhoneCodeService service;
+
+    @MockBean
+    private CountryCodeWikiConsumer consumer;
 
     @Autowired
     private MockMvc mockMvc;
@@ -108,7 +112,7 @@ class PhoneNumberControllerImplTest {
     @MethodSource("provideExpectedCountriesByPhoneNumber")
     void whenValidPhoneNumber_shouldReturnListOfMatchingCountries(String phoneNumber, List<String> countries) throws Exception {
         // set up
-        when(repository.findAll()).thenReturn(List.of(
+        when(service.findStartingWith(any())).thenReturn(Set.of(
                 new CountryPhoneCode(1, "Bahamas", "1242"),
                 new CountryPhoneCode(1, "United States", "1"),
                 new CountryPhoneCode(1, "Canada", "1"),
