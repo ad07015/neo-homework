@@ -3,6 +3,7 @@ package com.neotech.controller;
 import com.neotech.consumer.CountryCodeWikiConsumer;
 import com.neotech.model.CountryPhoneCode;
 import com.neotech.repository.CountryPhoneCodeRepository;
+import com.neotech.service.CountryPhoneCodeService;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -41,7 +43,7 @@ class PhoneNumberControllerImplTest {
     private CountryPhoneCodeRepository repository;
 
     @MockBean
-    private CountryCodeWikiConsumer countryCodeWikiConsumer;
+    private CountryPhoneCodeService service;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +51,7 @@ class PhoneNumberControllerImplTest {
     @Test
     void whenPhoneNumberLatvian_expectLatvia() throws Exception {
         // set up
-        when(repository.findAll()).thenReturn(List.of(new CountryPhoneCode(1, "Latvia", "371")));
+        when(service.findStartingWith("3")).thenReturn(Set.of(new CountryPhoneCode(1, "Latvia", "371")));
 
         var validLatvianPhoneNumber = "37129667232";
 

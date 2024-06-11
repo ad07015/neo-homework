@@ -17,14 +17,14 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(PhoneNumberNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<String> handleConversion(PhoneNumberNotValidException ex) throws JsonProcessingException {
+    public ResponseEntity<String> handleBadRequest(PhoneNumberNotValidException ex) throws JsonProcessingException {
         var objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(ex.getMessage()), BAD_REQUEST);
     }
 
     @ExceptionHandler(CountryNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
-    public ResponseEntity<String> handleMyCustomException(CountryNotFoundException ex) throws JsonProcessingException {
+    public ResponseEntity<String> handleNotFound(CountryNotFoundException ex) throws JsonProcessingException {
         var objectMapper = new ObjectMapper();
         return new ResponseEntity<>(objectMapper.writeValueAsString(ex.getMessage()), NOT_FOUND);
     }

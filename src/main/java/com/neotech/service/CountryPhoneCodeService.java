@@ -22,10 +22,6 @@ public class CountryPhoneCodeService {
         this.countryPhoneCodeRepository = countryPhoneCodeRepository;
     }
 
-    public Set<CountryPhoneCode> findAll() {
-        return new HashSet<>(countryPhoneCodeRepository.findAll());
-    }
-
     public Set<CountryPhoneCode> findStartingWith(String firstDigit) {
         return new HashSet<>(countryPhoneCodeRepository.findByCodeStartingWith(firstDigit));
     }
