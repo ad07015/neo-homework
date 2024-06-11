@@ -6,7 +6,9 @@ import com.neotech.repository.CountryPhoneCodeRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class CountryPhoneCodeService {
@@ -30,9 +32,7 @@ public class CountryPhoneCodeService {
     public Set<CountryPhoneCode> extractCountryCodesFromWiki() throws IOException {
         Map<String, String> countryToCountryCodeMap = countryCodeWikiConsumer.extractCountryCodesFromWiki();
         var countryCodes = new HashSet<CountryPhoneCode>();
-        countryToCountryCodeMap.forEach((country, code) -> {
-            countryCodes.add(new CountryPhoneCode(null, country, code));
-        });
+        countryToCountryCodeMap.forEach((country, code) -> countryCodes.add(new CountryPhoneCode(null, country, code)));
         return countryCodes;
     }
 

@@ -1,6 +1,5 @@
 package com.neotech.controller;
 
-import com.neotech.consumer.CountryCodeWikiConsumer;
 import com.neotech.exception.CountryNotFoundException;
 import com.neotech.exception.PhoneNumberNotValidException;
 import com.neotech.model.CountryPhoneCode;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -29,6 +27,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class PhoneNumberControllerImpl implements PhoneNumberController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PhoneNumberControllerImpl.class);
+
     private final CountryPhoneCodeService countryPhoneCodeService;
 
     public PhoneNumberControllerImpl(CountryPhoneCodeService countryPhoneCodeService) {
