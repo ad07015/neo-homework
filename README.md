@@ -4,7 +4,7 @@
   - Github profile: **[ad07015](https://github.com/ad07015)**
 - Project Github repository: **[neo-homework](https://github.com/ad07015/neo-homework)**
 
-### Configuring the database
+### Running the application
 - Run a PostgreSQL server in a docker container on a local machine on port 5432
   - docker run --name verywood-db -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
 - Create a root database user
@@ -27,11 +27,25 @@ Swagger is a user interface that allows to manually run REST API calls without u
 
 Swagger for this application is available here: **[swagger](http://localhost:8088/swagger-ui/index.html)**
 
-### TODO
+### Requirements
 **Functional requirements:**
-- [ ] Handle special cases for countries with multiple region codes, 
-e.g. 'Isle of Man' - 44 (1624, 7524, 7624, 7924)
-- [ ] Implement a simple front page
+- [x] Пользователь вводит номер телефона, приложение его валидирует и определяет страну. В случае удачного определения на экран выводится название страны, в противном случае сообщение об ошибке.
+- [ ] Приложение должно определять самую подходящую страну, например:
+  - Для номера «12423222931» ожидаемая страна “Bahamas”
+  - Для номера «11165384765» ожидаемые страны “United States, Canada”
+  - Для номера «71423423412» ожидаемая страна “Russia”
+  - Для номера «77112227231» ожидаемая страна “Kazakhstan”
+- [ ] Таблицу нужно загружать каждый раз при запуске приложения.
+- [x] Все обращения к приложению выполняются через RESTful API с JSON в качестве
+  формата данных.
+- [x] Сервер должен запускаться на 8088 порту.
+
+**Additional requirements:**
+- [ ] Предусмотреть сборку и запуск приложения из командной строки. 
+- [ ] Предусмотреть запуск тестов из командноий строки, а также формирование отчетов по результату их исполнения. 
+- [ ] Внешниий вид интерфеийса неважен, достаточно простой и опрятноий вёрстки. 
+- [x] Проект необходимо сопроводить README.md файлом с подробноий инструкциеий к запуску.
+- [x] Проект должен быть публично доступным к просмотру в GitHub.
 
 **Quality of life improvements:**
 - [ ] Create a docker-compose file to automatically pull and run the PostgreSQL container
