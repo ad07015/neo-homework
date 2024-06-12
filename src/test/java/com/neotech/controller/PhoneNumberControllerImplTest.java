@@ -19,12 +19,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static java.util.stream.Collectors.toSet;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -110,14 +111,13 @@ class PhoneNumberControllerImplTest {
 
     @ParameterizedTest
     @MethodSource("provideExpectedCountriesByPhoneNumber")
-    void whenValidPhoneNumber_shouldReturnListOfMatchingCountries(String phoneNumber, List<String> countries) throws Exception {
+    void whenValidPhoneNumber_shouldReturnListOfMatchingCountries(String phoneNumber, List<String> expectedCountries) throws Exception {
         // set up
         when(service.findStartingWith(any())).thenReturn(Set.of(
-                new CountryPhoneCode(1, "Bahamas", "1242"),
-                new CountryPhoneCode(1, "United States", "1"),
                 new CountryPhoneCode(1, "Canada", "1"),
+                new CountryPhoneCode(1, "United States", "1"),
+                new CountryPhoneCode(1, "Bahamas", "1242"),
                 new CountryPhoneCode(1, "Russia", "7"),
-                new CountryPhoneCode(1, "Kazakhstan", "371"),
                 new CountryPhoneCode(1, "Kazakhstan", "76"),
                 new CountryPhoneCode(1, "Kazakhstan", "77"),
                 new CountryPhoneCode(1, "Latvia", "371")
@@ -130,11 +130,17 @@ class PhoneNumberControllerImplTest {
         var result = this.mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andReturn();
-        String content = result.getResponse().getContentAsString();
+        var responseContent = result.getResponse().getContentAsString();
+        var matchedCountries = Arrays.stream(
+                responseContent.substring(1, responseContent.length() - 1)
+                        .split(","))
+                .map(value -> value.substring(1, value.length() - 1)) // remove quotes
+                .collect(toSet());
 
         // verify
-        for (String country : countries) {
-            assertTrue(content.contains(country));
+        assertEquals(expectedCountries.size(), matchedCountries.size());
+        for (String country : expectedCountries) {
+            assertTrue(responseContent.contains(country));
         }
     }
 

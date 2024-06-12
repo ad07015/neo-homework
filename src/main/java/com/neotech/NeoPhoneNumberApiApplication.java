@@ -9,5 +9,4 @@ public class NeoPhoneNumberApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(NeoPhoneNumberApiApplication.class, args);
     }
-
 }

@@ -36,16 +36,15 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
 
     @Override
     @GetMapping(value = "/country-by-phone-number", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<String>> getCountriesByPhoneNumber(String phoneNumber) throws CountryNotFoundException, PhoneNumberNotValidException, IOException {
+    public ResponseEntity<Set<String>> getCountriesByPhoneNumber(String phoneNumber)
+            throws CountryNotFoundException, PhoneNumberNotValidException {
 
-        if (!StringUtils.isNumeric(phoneNumber)) {
+        if (StringUtils.isBlank(phoneNumber) || !StringUtils.isNumeric(phoneNumber)) {
             throw new PhoneNumberNotValidException(PhoneNumberNotValidException.MESSAGE);
         }
 
-        var countryPhoneCodes = countryPhoneCodeService.extractCountryCodesFromWiki();
-        countryPhoneCodeService.persistCountryCodes(countryPhoneCodes);
-
-        Set<CountryPhoneCode> allCodes = countryPhoneCodeService.findStartingWith(phoneNumber.substring(0, 1));
+        var firstDigit = phoneNumber.substring(0, 1);
+        var allCodes = countryPhoneCodeService.findStartingWith(firstDigit);
         LOGGER.info("Retrieved codes count: " + allCodes.size());
 
         var matchingCodes = allCodes.stream()
