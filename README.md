@@ -25,19 +25,18 @@ for example:
 ### Swagger
 Swagger is a user interface that allows to manually run REST API calls without using a dedicated REST client like Postman.
 
-Swagger for this application is available here: **[swagger](http://localhost:8088/swagger-ui/index.html)**
+Swagger UI is available here: **[swagger](http://localhost:8088/swagger-ui/index.html)**
 
 ### Requirements
 **Functional requirements:**
 - [x] Пользователь вводит номер телефона, приложение его валидирует и определяет страну. В случае удачного определения на экран выводится название страны, в противном случае сообщение об ошибке.
-- [ ] Приложение должно определять самую подходящую страну, например:
-  - Для номера «12423222931» ожидаемая страна “Bahamas”
-  - Для номера «11165384765» ожидаемые страны “United States, Canada”
-  - Для номера «71423423412» ожидаемая страна “Russia”
-  - Для номера «77112227231» ожидаемая страна “Kazakhstan”
-- [ ] Таблицу нужно загружать каждый раз при запуске приложения.
-- [x] Все обращения к приложению выполняются через RESTful API с JSON в качестве
-  формата данных.
+- [x] Приложение должно определять самую подходящую страну, например:
+  - [x] Для номера «12423222931» ожидаемая страна “Bahamas”
+  - [x] Для номера «11165384765» ожидаемые страны “United States, Canada”
+  - [x] Для номера «71423423412» ожидаемая страна “Russia”
+  - [x] Для номера «77112227231» ожидаемая страна “Kazakhstan”
+- [x] Таблицу нужно загружать каждый раз при запуске приложения.
+- [x] Все обращения к приложению выполняются через RESTful API с JSON в качестве формата данных.
 - [x] Сервер должен запускаться на 8088 порту.
 
 **Additional requirements:**
@@ -46,7 +45,3 @@ Swagger for this application is available here: **[swagger](http://localhost:808
 - [ ] Внешниий вид интерфеийса неважен, достаточно простой и опрятноий вёрстки. 
 - [x] Проект необходимо сопроводить README.md файлом с подробноий инструкциеий к запуску.
 - [x] Проект должен быть публично доступным к просмотру в GitHub.
-
-**Quality of life improvements:**
-- [ ] Create a docker-compose file to automatically pull and run the PostgreSQL container
-on port 5432
