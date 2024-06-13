@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -50,7 +49,7 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
         var matchingCodes = allCodes.stream()
                 .map(code -> {
                     if (phoneNumber.startsWith(code.getCode())) {
-                        return code.getCountry();
+                        return code;
                     }
                     return null;
                 })
@@ -60,6 +59,16 @@ public class PhoneNumberControllerImpl implements PhoneNumberController {
         if (matchingCodes.isEmpty()) {
             throw new CountryNotFoundException(CountryNotFoundException.MESSAGE);
         }
-        return new ResponseEntity<>(matchingCodes, HttpStatus.OK);
+        var maxCodeLength = Collections.max(
+                matchingCodes.stream()
+                    .map(code -> code.getCode().length())
+                    .collect(toSet())
+        );
+        var exactMatches = matchingCodes.stream()
+                .map(CountryPhoneCode::getCountry)
+                .filter(country -> country.length() == maxCodeLength)
+                .collect(toSet());
+
+        return new ResponseEntity<>(exactMatches, HttpStatus.OK);
     }
 }

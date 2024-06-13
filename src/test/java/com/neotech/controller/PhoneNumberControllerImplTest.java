@@ -25,11 +25,15 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.StatusResultMatchersExtensionsKt.isEqualTo;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(value = PhoneNumberControllerImpl.class)
@@ -131,16 +135,18 @@ class PhoneNumberControllerImplTest {
                 .andExpect(status().isOk())
                 .andReturn();
         var responseContent = result.getResponse().getContentAsString();
-        var matchedCountries = Arrays.stream(
-                responseContent.substring(1, responseContent.length() - 1)
-                        .split(","))
-                .map(value -> value.substring(1, value.length() - 1)) // remove quotes
+
+        Stream<String> matchedCountriesStream = responseContent.startsWith("[")
+                ? Arrays.stream(responseContent.substring(1, responseContent.length() - 1).split(","))
+                : Arrays.stream(responseContent.split(","));
+        Set<String> matchedCountries = matchedCountriesStream.map(value -> value.startsWith("\"") ? value.substring(1, value.length() - 1) : value) // remove quotes
                 .collect(toSet());
 
         // verify
         assertEquals(expectedCountries.size(), matchedCountries.size());
+//        assertThat(expectedCountries.size(), isEqualTo(matchedCountries.size()))
         for (String country : expectedCountries) {
-            assertTrue(responseContent.contains(country));
+            assertThat(matchedCountries, hasItems(country));
         }
     }
 
