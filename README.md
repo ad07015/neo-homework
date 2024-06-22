@@ -6,7 +6,7 @@
 
 ### Running the application
 - Run a PostgreSQL server in a docker container on a local machine on port 5432
-  - docker run --name verywood-db -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
+  - docker run --name verywood-db -e POSTGRES_PASSWORD=example -p 5432:5432 -d postgres
 - Create a root database user
 - Create a database by running the following SQL script:
   - CREATE DATABASE postgres
@@ -16,7 +16,7 @@
 for example:
   - spring.datasource.url: jdbc:postgresql://localhost:5432/postgres
   - spring.datasource.username: postgres
-  - spring.datasource.password: mysecretpassword
+  - spring.datasource.password: example
 - Create a db schema 'neo' in your 'postgres' database by running the following SQL script:
   - CREATE SCHEMA IF NOT EXISTS schema_name
 - Run the application by running the NeoPhoneNumberApiApplication.java class, Flyway will create the required database tables

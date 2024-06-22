@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_DB: neo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+
+ #  api_service:
+ #    build: .
+ #    restart: always
+ #    ports:
+ #      - 8088:8088
+ #    networks:
+ #      - springapimysql-net
+ #    environment:
+ #      - spring.datasource.url=jdbc:mysql://mysqldb:3306/neo_db?allowPublicKeyRetrieval=true
+
+ #    depends_on:
+ #      - mysqldb
+
+ #    volumes:
+ #      - .m2:/root/.m2
+
+
+# networks:
+# springapimysql-net:

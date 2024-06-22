@@ -14,11 +14,11 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: mysecretpassword
+    password: example
     driver-class-name: org.postgresql.Driver
   flyway:
     user: postgres
-    password: mysecretpassword
+    password: example
     default-schema: neo
     url: 'jdbc:postgresql://localhost:5432/postgres'
     locations: filesystem:db/migration
