@@ -115,6 +115,13 @@
             <version>3.0.8</version>
         </dependency>
 
+        <!-- DOCKER COMPOSE-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
         <!-- TESTING -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
