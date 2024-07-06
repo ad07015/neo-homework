@@ -2,6 +2,7 @@ package com.neotech.controller;
 
 import com.neotech.consumer.CountryCodeWikiConsumer;
 import com.neotech.exception.CountryNotFoundException;
+import com.neotech.exception.PhoneNumberNotValidException;
 import com.neotech.repository.CountryPhoneCodeRepository;
 import com.neotech.service.CountryPhoneCodeService;
 import jakarta.servlet.ServletException;
@@ -24,9 +25,12 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItems;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,10 +48,8 @@ class PhoneNumberControllerImplTest {
 
     @MockBean
     private CountryPhoneCodeRepository repository;
-
     @MockBean
     private CountryCodeWikiConsumer consumer;
-
     @MockBean
     private CountryPhoneCodeService service;
 
@@ -58,19 +60,18 @@ class PhoneNumberControllerImplTest {
     void whenPhoneNumberLatvian_expectLatvia() throws Exception {
         // set up
         var validLatvianPhoneNumber = "37123456789";
-        when(service.findMatchedCountries(any())).thenReturn(Set.of("Latvia"));
-
-        var requestBuilder = get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
-                .param(PHONE_NUMBER_PARAM_NAME, validLatvianPhoneNumber);
+        when(service.findMatchedCountries(validLatvianPhoneNumber)).thenReturn(Set.of("Latvia"));
 
         // perform
-        var result = this.mockMvc.perform(requestBuilder)
+        var mvcResult = mockMvc.perform(get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
+                .param(PHONE_NUMBER_PARAM_NAME, validLatvianPhoneNumber))
                 .andExpect(status().isOk())
-                .andReturn();
-        String content = result.getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
         // verify
-        assertTrue(content.contains("Latvia"));
+        assertThat(mvcResult, containsString("Latvia"));
     }
 
     @Test
@@ -84,17 +85,17 @@ class PhoneNumberControllerImplTest {
 
         // perform
         var servletException = assertThrows(ServletException.class, () ->
-            this.mockMvc.perform(requestBuilder)
-                    .andExpect(status().isNotFound())
-                    .andReturn()
+                this.mockMvc.perform(requestBuilder)
         );
+        var cause = servletException.getCause();
 
         // verify
-        assertTrue(servletException.getMessage().contains("CountryNotFoundException"));
+        assertThat(cause.getClass(), is(CountryNotFoundException.class));
+        assertThat(cause.getMessage(), is(equalTo(CountryNotFoundException.MESSAGE)));
     }
 
     @Test
-    void whenPhoneNumberNotANumber_expectNotFound() {
+    void whenPhoneNumberNotANumber_expectBadRequest() {
         // set up
         var notANumberPhoneNumber = "text";
 
@@ -104,12 +105,12 @@ class PhoneNumberControllerImplTest {
         // perform
         var servletException = assertThrows(ServletException.class, () ->
             this.mockMvc.perform(requestBuilder)
-                    .andExpect(status().isBadRequest())
-                    .andReturn()
         );
+        var cause = servletException.getCause();
 
         // verify
-        assertTrue(servletException.getMessage().contains("PhoneNumberNotValidException"));
+        assertThat(cause.getClass(), is(PhoneNumberNotValidException.class));
+        assertThat(cause.getMessage(), is(equalTo(PhoneNumberNotValidException.MESSAGE)));
     }
 
     @ParameterizedTest
@@ -118,26 +119,21 @@ class PhoneNumberControllerImplTest {
         // set up
         when(service.findMatchedCountries(any())).thenReturn(expectedCountries);
 
-        var requestBuilder = get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
-                .param(PHONE_NUMBER_PARAM_NAME, phoneNumber);
-
         // perform
-        var result = this.mockMvc.perform(requestBuilder)
+        String mvcResult = mockMvc.perform(get(NEO_COUNTRY_BY_PHONE_NUMBER_PATH)
+                .param(PHONE_NUMBER_PARAM_NAME, phoneNumber))
                 .andExpect(status().isOk())
-                .andReturn();
-        var responseContent = result.getResponse().getContentAsString();
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
-        var matchedCountriesArray = responseContent.startsWith("[")
-                ? responseContent.substring(1, responseContent.length() - 1).split(",")
-                : responseContent.split(",");
-        var matchedCountries = Arrays.stream(matchedCountriesArray).map(value ->
-                        value.startsWith("\"")
-                                ? value.substring(1, value.length() - 1) // remove double quotes
-                                : value)
+        String[] matchedCountriesArray = removeSurrounding(mvcResult).split(",");
+        Set<String> matchedCountries = Arrays.stream(matchedCountriesArray)
+                .map(this::removeSurrounding)
                 .collect(toSet());
 
         // verify
-        assertEquals(expectedCountries.size(), matchedCountries.size());
+        assertThat(matchedCountries.size(), is(equalTo(expectedCountries.size())));
         for (String country : expectedCountries) {
             assertThat(matchedCountries, hasItems(country));
         }
@@ -151,5 +147,9 @@ class PhoneNumberControllerImplTest {
                 Arguments.of("77112227231", Set.of("Kazakhstan")),
                 Arguments.of("37123456789", Set.of("Latvia"))
         );
+    }
+
+    private String removeSurrounding(String source) {
+        return source.substring(1, source.length() - 1);
     }
 }
