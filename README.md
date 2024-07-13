@@ -5,21 +5,7 @@
 - Project Github repository: **[neo-homework](https://github.com/ad07015/neo-homework)**
 
 ### Running the application
-- Run a PostgreSQL server in a docker container on a local machine on port 5432
-  - docker run --name verywood-db -e POSTGRES_PASSWORD=example -p 5432:5432 -d postgres
-- Create a root database user
-- Create a database by running the following SQL script:
-  - CREATE DATABASE postgres
-- Create a database schema by running the following SQL script:
-  - CREATE SCHEMA IF NOT EXISTS neo
-- Provide database username, password and URL in src/main/java/resources/application.yml, 
-for example:
-  - spring.datasource.url: jdbc:postgresql://localhost:5432/postgres
-  - spring.datasource.username: postgres
-  - spring.datasource.password: example
-- Create a db schema 'neo' in your 'postgres' database by running the following SQL script:
-  - CREATE SCHEMA IF NOT EXISTS schema_name
-- Run the application by running the NeoPhoneNumberApiApplication.java class, Flyway will create the required database tables
+- Run the application by running the NeoPhoneNumberApiApplication.java class, docker will spin up the database, and spring will create the necessary tables
 - Proceed to using the application with Swagger or a dedicated REST API client of your choice, e.g. Postman
 
 ### Swagger

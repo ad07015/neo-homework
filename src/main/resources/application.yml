@@ -5,23 +5,7 @@ spring:
   application:
     name: neo-phone-number-api
   jpa:
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        default_schema: neo
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: example
-    driver-class-name: org.postgresql.Driver
-  flyway:
-    user: postgres
-    password: example
-    default-schema: neo
-    url: 'jdbc:postgresql://localhost:5432/postgres'
-    locations: filesystem:db/migration
+    generate-ddl: true
 
 springdoc:
   api-docs:
